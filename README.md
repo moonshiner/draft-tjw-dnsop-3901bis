@@ -65,21 +65,18 @@ Table of Contents
      1.1.  Name Space Fragmentation: following the referral chain  .   2
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
    3.  Policy Based Avoidance of Name Space Fragmentation  . . . . .   3
-   4.  DNS IPv6 Transport recommended Guidelines . . . . . . . . . .   4
+   4.  DNS IPv6 Transport recommended Guidelines . . . . . . . . . .   3
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
    7.  Normative References  . . . . . . . . . . . . . . . . . . . .   4
-   8.  Informative References  . . . . . . . . . . . . . . . . . . .   5
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .   4
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .   5
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   5
 
 1.  Introduction
 
-   When the Internet moves from IPv4 to a mixture of IPv4 and IPv6 it is
-   only a matter of time until this starts to happen.  The complete DNS
-   hierarchy then starts to fragment into a graph where authoritative
-   name servers for certain nodes are only accessible over a certain
-   transport.  The concern is that a resolver using only a particular
+   The Internet is well on its way to a mixture of IPv4 and IPv6
+   networkd.  The concern is that a resolver using only a particular
    version of IP and querying information about another node using the
    same version of IP can not do it because somewhere in the chain of
    servers accessed during the resolution process, one or more of them
@@ -105,7 +102,10 @@ Table of Contents
    be equally simple, with the exception of IPv4 recursive name servers
    having to switch to a forwarding configuration.
 
-
+   Instead, the transition will be from IPv4 only to a mixture of IPv4
+   and IPv6, with three categories of DNS data depending on whether the
+   information is available only over IPv4 transport, only over IPv6 or
+   both.
 
 
 
@@ -115,20 +115,8 @@ Wicinski. (ed)           Expires 23 January 2024                [Page 2]
 Internet-Draft                   3901bis                       July 2023
 
 
-   However, the second situation will not arise in the foreseeable
-   future.  Instead, the transition will be from IPv4 only to a mixture
-   of IPv4 and IPv6, with three categories of DNS data depending on
-   whether the information is available only over IPv4 transport, only
-   over IPv6 or both.
-
-   Having DNS data available on both transports is the best situation.
-   The major question is how to ensure that it becomes the norm as
-   quickly as possible.  However, while it is obvious that some DNS data
-   will only be available over v4 transport for a long time it is also
-   obvious that it is important to avoid fragmenting the name space
-   available to IPv4 only hosts.  For example, during transition it is
-   not acceptable to break the name space that we presently have
-   available for IPv4-only hosts.
+   Having DNS data available on both transports is the optimal
+   situation.
 
 2.  Terminology
 
@@ -150,26 +138,14 @@ Internet-Draft                   3901bis                       July 2023
 
 3.  Policy Based Avoidance of Name Space Fragmentation
 
-   Today there are only a few DNS "zones" on the public Internet that
-   are available over IPv6 transport, and most of them can be regarded
-   as "experimental" (TJW: reword and ref 8499).
-   However, as soon as the root and top level domains are available over
-   IPv6 transport, it is reasonable to expect that it will become more
-   common to have zones served by IPv6 servers.
+   Today there are only a few DNS zones on the public Internet that are
+   available over IPv6 transport, and most of them can be regarded as
+   "experimental" (TJW: reword and ref 8499).
 
    Having those zones served only by IPv6-only name server would not be
    a good development, since this will fragment the previously
    unfragmented IPv4 name space and there are strong reasons to find a
    mechanism to avoid it.
-
-
-
-
-
-Wicinski. (ed)           Expires 23 January 2024                [Page 3]
-
-Internet-Draft                   3901bis                       July 2023
-
 
    The recommended approach to maintain name space continuity is to use
    administrative policies, as described in the next section.
@@ -179,17 +155,21 @@ Internet-Draft                   3901bis                       July 2023
    In order to preserve name space continuity, the following
    administrative policies are recommended:
 
-   *  every recursive name server SHOULD be dual stack IPv4/IPv6.
-
-   This rules out IPv4-only and IPv6-only recursive servers.
-   However, one might design configurations where a chain of IPv6-only
-   name server forward queries to a set of dual stack recursive name
-   server actually performing those recursive queries.
+   *  every recursive name server SHOULD support the local network
+      configuration.  If the local network supports both IPv4 and IPv5,
+      the resolver SHOULD be dual stack.
 
    *  every DNS zone SHOULD be dual stack IPv4/IPv6.
 
    A DNS zone can be served by at least one IPv4-reachable authoritative
    name server.
+
+
+
+Wicinski. (ed)           Expires 23 January 2024                [Page 3]
+
+Internet-Draft                   3901bis                       July 2023
+
 
    This rules out DNS zones served only by IPv6-only authoritative name
    servers.
@@ -218,15 +198,6 @@ Internet-Draft                   3901bis                       July 2023
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
-
-
-
-
-Wicinski. (ed)           Expires 23 January 2024                [Page 4]
-
-Internet-Draft                   3901bis                       July 2023
-
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -248,6 +219,14 @@ Internet-Draft                   3901bis                       July 2023
 
 8.  Informative References
 
+
+
+
+Wicinski. (ed)           Expires 23 January 2024                [Page 4]
+
+Internet-Draft                   3901bis                       July 2023
+
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -258,7 +237,7 @@ Internet-Draft                   3901bis                       July 2023
 
 Acknowledgements
 
-   Ack
+   Mark Andrews
 
 Author's Address
 
@@ -266,6 +245,27 @@ Author's Address
    Elkins, WV 26241
    United States of America
    Email: tjw.ietf@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
